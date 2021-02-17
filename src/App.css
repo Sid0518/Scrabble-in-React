@@ -1,0 +1,206 @@
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  visibility: inherit;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background-color: rgba(51, 51, 51, 1);
+
+  /* overflow: hidden; */
+}
+
+.no-display {
+  display: none;
+}
+
+.no-visibility {
+  visibility: hidden;
+}
+
+.no-hover {
+  pointer-events: none;
+}
+
+.app {
+  height: 100vh;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.board-wrapper {
+  height: 95vh;
+  width: 0;
+  padding-left : 95vh;
+
+  position: relative;
+}
+
+.board {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  height: 100%;
+  width: 100%;
+
+  padding: 1rem;
+
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+  grid-gap: 0.2rem;
+
+  box-shadow: 0 0 16px 4px rgba(80, 80, 80, 1);
+}
+
+.square {
+  width: 100%;
+  height: 0;
+  padding-top: 100%;
+  position: relative;
+
+  transition-property: padding-top;
+  transition-duration: 250ms;
+}
+
+.square * {
+  overflow: hidden;
+}
+
+.collapsed-tile {
+  overflow: hidden;
+  visibility: hidden;
+  padding-top: 0;
+}
+
+.cell, .tile {
+  border-radius: 0.25rem;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  height: 100%;
+  width: 100%;
+}
+
+.cell {
+  background-color: burlywood;
+  transition: background-color 250ms;
+}
+
+.cell-drag-over .cell {
+  background-color: rgba(255, 255, 255, 0.85);
+}
+
+.tile * {
+  position: absolute;
+  color: brown;
+
+  transition: font-size 250ms ease-out;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tile-letter {
+  width: 90%;
+  height: 90%;
+  border-radius: 0.2rem;
+
+  background-color: antiquewhite;
+  font-size: 2.5rem;
+  font-weight: lighter;
+
+  text-align: center;
+  top: 5%;
+  left: 5%;
+}
+
+.tile-points {
+  font-size: 1.2rem;
+  font-weight: normal;
+
+  bottom: 0;
+  right: 0;
+  padding: 10%;
+}
+
+.triple-word {
+  background-color: coral;
+}
+
+.double-word {
+  background-color:deeppink;
+}
+
+.triple-letter {
+  background-color: cornflowerblue;
+}
+
+.double-letter {
+  background-color:lightseagreen;
+}
+
+.tile {
+  transition-property: background-color; /* height, width, transform; */
+  transition-duration: 250ms;
+
+  cursor: pointer;
+}
+
+/* .tile:hover {
+  height: 108%;
+  width: 108%;
+  transform: translate(-4%, -4%) rotateZ(-8deg);
+} */
+
+.tile:hover .tile-letter {
+  background-color: bisque;
+}
+
+.player-tiles {
+  box-shadow: 0 0 16px 4px rgba(80, 80, 80, 1);
+
+  position: relative;
+
+  padding: 8px;
+  height: max-content;
+  width: 6rem;
+  margin: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+}
+
+.player-tiles .square {
+  margin: 0.25rem 0;
+}
+
+.cell .tile-letter {
+  font-size: 1.5rem;
+}
+
+.cell .tile-points {
+  font-size: 0.8rem;
+}
