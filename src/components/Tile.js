@@ -47,11 +47,23 @@ class Tile extends Component {
                 false,
             draggable: (props.draggable !== undefined) ? 
                 props.draggable : 
-                false
+                false,
+            shouldExpand: true
         }
     }
 
     componentDidMount() {
+        if(this.state.shouldExpand) {
+            setTimeout(() => {
+                if(this.element !== null && this.element !== undefined) {
+                    this.element.classList.remove("collapsed-tile");
+                    this.setState({
+                        shouldExpand: false
+                    });
+                }
+            }, 0);
+        }
+        
         this.element.addEventListener(
             "removeTile", 
             () => {
@@ -83,29 +95,29 @@ class Tile extends Component {
     }
 
     render() {
+        let className = "square";
+        if(!this.state.draggable)
+            className += " no-hover";
+        if(this.state.shouldExpand)
+            className += " collapsed-tile";
+
         return (
             <div
                 ref={ref => this.element = ref}
-                className={`square ${!this.state.draggable ? "no-hover" : ""}`} 
-                id={this.id} 
+                className={className}
+                id={this.id}
                 draggable={this.state.draggable}
                 onDragStart={this.startDrag}
                 onDragOver={this.dragOver}
             >
                 <div className="tile">
                     <div className="tile-letter">
-                        {this.state.letter !== null ? 
-                            this.state.letter : ""}
+                        {this.state.letter}
                     </div>
 
                     <div className="tile-points">
-                    {
-                        this.state.letter != null ? 
-                            (points[this.state.letter] ?? "") : 
-                            ""
-                    }
+                        {points[this.state.letter] ?? ""}
                     </div>
-
                 </div>
             </div>
         )

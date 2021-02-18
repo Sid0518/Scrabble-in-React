@@ -1,3 +1,4 @@
+import { Component } from "react";
 import Cell from "./Cell";
 import DoubleLetterCell from "./DoubleLetterCell";
 import DoubleWordCell from "./DoubleWordCell";
@@ -22,29 +23,34 @@ const doubleLetter = [
     221
 ];
 
-const Board = () => {
-    const board = [];
-    
-    for(let i = 0;i < 225;i++) {
-        if(tripleWord.includes(i))
-            board.push(<TripleWordCell key={i} droppable={true}/>)
-        else if(doubleWord.includes(i))
-            board.push(<DoubleWordCell key={i} droppable={true}/>)
-        else if(tripleLetter.includes(i))
-            board.push(<TripleLetterCell key={i} droppable={true}/>)
-        else if(doubleLetter.includes(i))
-            board.push(<DoubleLetterCell key={i} droppable={true}/>)
-        else
-            board.push(<Cell key={i} droppable={true}/>)
+class Board extends Component {
+    constructor(props) {
+        super(props);
+        
+        this.board = [];
+        for(let i = 0;i < 225;i++) {
+            if(tripleWord.includes(i))
+                this.board.push(<TripleWordCell key={i} droppable={true}/>)
+            else if(doubleWord.includes(i))
+                this.board.push(<DoubleWordCell key={i} droppable={true}/>)
+            else if(tripleLetter.includes(i))
+                this.board.push(<TripleLetterCell key={i} droppable={true}/>)
+            else if(doubleLetter.includes(i))
+                this.board.push(<DoubleLetterCell key={i} droppable={true}/>)
+            else
+                this.board.push(<Cell key={i} droppable={true}/>)
+        }
     }
 
-    return (
-        <div className="board-wrapper">
-            <div className="board">
-                {board}
+    render() {
+        return (
+            <div className="board-wrapper">
+                <div className="board">
+                    {this.board}
+                </div>
             </div>
-        </div>
-    )
+        );
+    }
 }
 
 export default Board;

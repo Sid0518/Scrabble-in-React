@@ -6,5 +6,6 @@ export default class TripleWordCell extends Cell {
     
         this.className = "cell triple-word special-cell";
         this.wordMultiplier = 3;
+        this.rewardLabel = "TW";
     }
 }

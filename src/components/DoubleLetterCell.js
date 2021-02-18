@@ -6,5 +6,6 @@ export default class DoubleLetterCell extends Cell {
         
         this.className = "cell double-letter special-cell";
         this.letterMultiplier = 2;
+        this.rewardLabel = "DL";
     }
 }

@@ -98,6 +98,16 @@ body {
 .cell {
   background-color: burlywood;
   transition: background-color 250ms;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reward-label {
+  color: antiquewhite;
+  position: absolute;
+  z-index: 0;
 }
 
 .cell-drag-over .cell {
@@ -106,6 +116,7 @@ body {
 
 .tile * {
   position: absolute;
+  z-index: 1;
   color: brown;
 
   transition: font-size 250ms ease-out;
@@ -185,7 +196,7 @@ body {
 
   padding: 8px;
   height: max-content;
-  width: 6rem;
+  width: 5.5rem;
   margin: auto;
 
   display: flex;
@@ -203,4 +214,27 @@ body {
 
 .cell .tile-points {
   font-size: 0.8rem;
+}
+
+.confirm-turn {
+  background-color: burlywood;
+  border-radius: 7.5ch;
+
+  margin-top: 1rem;
+  padding: 0.75rem;
+  width: 15ch;
+  text-align: center;
+
+  color: brown;
+  font-size: 1.25rem;
+
+  transition-property: background-color, color;
+  transition-duration: 250ms;
+
+  cursor: pointer;
+}
+
+.confirm-turn:hover {
+  background-color: brown;
+  color: burlywood;
 }

@@ -11,6 +11,7 @@ export default class Cell extends Component {
         this.className = "cell";
         this.letterMultiplier = 1;
         this.wordMultiplier = 1;
+        this.rewardLabel = "";
 
         this.state = {
             droppable: props.droppable,
@@ -78,6 +79,11 @@ export default class Cell extends Component {
                 onDrop={this.state.droppable ? this.drop : null}
             >
                 <div className={this.className}>
+                    
+                    <div className="reward-label">
+                        {this.rewardLabel}
+                    </div>
+
                     {
                         (this.state.letter !== undefined && this.state.letter !== null) ?
                             <Tile 
@@ -86,8 +92,7 @@ export default class Cell extends Component {
                                 draggable={true}
                                 removeTile={this.removeTile}
                                 inCell={true}
-                            /> :
-                            ""
+                            /> : ""
                     }
                 </div>
             </div>

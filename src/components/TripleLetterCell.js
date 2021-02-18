@@ -6,5 +6,6 @@ export default class TripleLetterCell extends Cell {
         
         this.className = "cell triple-letter special-cell";
         this.letterMultiplier = 3;
+        this.rewardLabel = "TL";
     }
 }

@@ -5,6 +5,7 @@ export default class DoubleWordCell extends Cell {
         super(props);
         
         this.className = "cell double-word special-cell";
-        this.wordMultiplier = 2;    
+        this.wordMultiplier = 2;
+        this.rewardLabel = "DW"; 
     }
 }
