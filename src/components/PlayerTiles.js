@@ -1,102 +1,31 @@
 import React, { Component } from "react";
-import {v4 as uuid} from "uuid";
 
 import Tile from "./Tile";
-import letterPool from "../LetterPool";
 
 class PlayerTiles extends Component {
     constructor(props) {
         super(props);
 
-        this.id = uuid();
-        
-        let tiles = [];
-        let tileRefs = [];
-
-        for(let i = 0;i < 7;i++) {
-            const tileId = uuid();
-            const letter = letterPool.getRandomLetter();
-            
-            const tile = <Tile
-                ref={ref => this.insertRef(ref, i)} 
-                key={tileId} id={tileId} 
-                letter={letter} index={i}
-                draggable={props.enabled}
-                expandCallback={() => this.updateExpandState(i)}
-                removeTile={this.removeTile}
-            />;
-            tiles.push(tile);
-        }
-
         this.state = {
-            enabled: props.enabled,
             dragOverIndex: null,
-            tiles: tiles,
-            tileRefs: tileRefs
         };
     }
 
-    toggle = (event) => {
-        event.stopPropagation();
-        this.state.tileRefs.forEach(ref => ref.toggle());
+    addTile = (letter, index) => {
+        setTimeout(() => this.props.addTile(letter, index), 0);
     }
 
-    removeTile = (i) => {
-        this.setState((state) => {
-           let tiles = [...state.tiles];
-           tiles.splice(i, 1);
-           
-           let tileRefs = [...state.tileRefs];
-           tileRefs.splice(i, 1);
-
-           return {
-               tiles: tiles,
-               tileRefs: tileRefs
-           };
-        });
+    removeTile = (index) => {
+        setTimeout(() => this.props.removeTile(index), 0);
     }
 
-    addTile = (letter, i) => {
-        this.setState((state) => {
-            const tileId = uuid();
-            const tile = <Tile
-                ref={ref => this.insertRef(ref, i)} 
-                key={tileId} id={tileId}
-                letter={letter} index={i} 
-                draggable={this.state.enabled}
-                expandCallback={() => this.updateExpandState(i)}
-                removeTile={this.removeTile}
-            />;
-            
-            let tiles = [...state.tiles];
-            tiles.splice(i, 0, tile);
- 
-            return {
-                tiles: tiles
-            };
-         });
-    }
-
-    insertRef = (ref, i) => {
-        if(ref !== null && ref !== undefined) {
-            this.setState((state) => {
-                let tileRefs = [...state.tileRefs];
-                tileRefs.splice(i, 0, ref);
-
-                return {
-                    tileRefs: tileRefs
-                };
-            });
-        }
-    }
-
-    getTileIndexFromEvent(event) {
+    getTileIndexFromEvent = (event) => {
         const dropY = event.clientY;
         const dropTarget = event.currentTarget;
 
         const rect = dropTarget.getBoundingClientRect();
         const ratio = (dropY - rect.top) / (rect.bottom - rect.top);
-        const index = Math.floor(this.state.tiles.length * ratio);
+        const index = Math.round(this.props.letters.length * ratio);
         
         return index;
     }
@@ -110,37 +39,35 @@ class PlayerTiles extends Component {
         event.stopPropagation();
         event.preventDefault();
 
-        const id = event.dataTransfer.getData("id");
-        const element = document.getElementById(id);
-        
-        if(element !== undefined && element !== null) {
-            element.classList.remove("collapsed-tile");
-            
-            const removalEvent = new Event("removeTile");
-            element.dispatchEvent(removalEvent);
-            
-            const letter = element.querySelector(".tile-letter").innerHTML;
-            const index = this.getTileIndexFromEvent(event);
-            this.setState(
-                {},
-                () => this.addTile(letter, index)
-            );
-        }
+        const letter = event.dataTransfer.getData("letter");
+        const index = this.getTileIndexFromEvent(event);
+        this.addTile(letter, index);
     }
 
     render() {
         return (
             <div className="player">
-                <div 
-                    key={this.id}
+                <div
                     className="player-tiles"
-                    onDragOver={this.state.enabled ? this.dragOver : null}
-                    onDrop={this.state.enabled ? this.drop : null}
+                    onDragOver={this.props.enabled ? this.dragOver : null}
+                    onDrop={this.props.enabled ? this.drop : null}
                 >
-                    {this.state.tiles}
+                    {
+                        this.props.letters.map((letter, index) => 
+                            <Tile
+                                id={index}
+                                letter={letter}
+                                draggable={this.props.enabled}
+                                removeTile={() => this.removeTile(index)}
+                            />
+                        )
+                    }
                 </div>
 
-                <div className={`confirm-turn ${!this.state.enabled ? "no-hover" : ""}`}>
+                <div 
+                    className={`confirm-turn ${!this.props.enabled ? "no-hover" : ""}`}
+                    onClick={this.props.toggle}
+                >
                     CONFIRM TURN
                 </div>
             </div>

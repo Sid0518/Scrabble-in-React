@@ -1,5 +1,4 @@
 import { Component } from "react";
-import {v4 as uuid} from "uuid";
 
 const points = {
     A: 1,
@@ -31,62 +30,13 @@ const points = {
 };
 
 class Tile extends Component {
-    constructor(props) {
-        super(props);
-
-        this.id = (props.id !== undefined) ? 
-            props.id : 
-            uuid();
-
-        this.index = props.index;
-        
-        this.state = {
-            letter: props.letter,
-            inCell: (props.inCell !== undefined) ?
-                props.inCell :
-                false,
-            draggable: (props.draggable !== undefined) ? 
-                props.draggable : 
-                false,
-            shouldExpand: true
-        }
-    }
-
-    componentDidMount() {
-        if(this.state.shouldExpand) {
-            setTimeout(() => {
-                if(this.element !== null && this.element !== undefined) {
-                    this.element.classList.remove("collapsed-tile");
-                    this.setState({
-                        shouldExpand: false
-                    });
-                }
-            }, 0);
-        }
-        
-        this.element.addEventListener(
-            "removeTile", 
-            () => {
-                this.props.removeTile(this.index);
-            }
-        );
-    }
-
     toggle = () => this.setState({
         draggable: !this.state.draggable
     });
 
     startDrag = (event) => {
-        let target = event.target;
-        event.dataTransfer.setData("id", target.id);
-        if(this.state.inCell)
-            setTimeout(() => {
-                target.classList.add("no-display");
-            }, 0);
-        else
-            setTimeout(() => {
-                target.classList.add("collapsed-tile");
-            }, 0);
+        event.dataTransfer.setData("letter", this.props.letter);
+        setTimeout(() => this.props.removeTile(), 0);
     }
 
     dragOver = (event) => {
@@ -96,27 +46,23 @@ class Tile extends Component {
 
     render() {
         let className = "square";
-        if(!this.state.draggable)
+        if(!(this.props.draggable ?? false))
             className += " no-hover";
-        if(this.state.shouldExpand)
-            className += " collapsed-tile";
 
         return (
             <div
-                ref={ref => this.element = ref}
                 className={className}
-                id={this.id}
-                draggable={this.state.draggable}
+                draggable={this.props.draggable ?? false}
                 onDragStart={this.startDrag}
                 onDragOver={this.dragOver}
             >
                 <div className="tile">
                     <div className="tile-letter">
-                        {this.state.letter}
+                        {this.props.letter ?? ":("}
                     </div>
 
                     <div className="tile-points">
-                        {points[this.state.letter] ?? ""}
+                        {points[this.props.letter] ?? ""}
                     </div>
                 </div>
             </div>

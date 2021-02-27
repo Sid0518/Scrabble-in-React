@@ -1,36 +1,126 @@
-import React from "react";
+import React, { Component } from "react";
 
 import './App.css';
 
 import Board from "./components/Board";
-import Player from "./components/Player";
+import PlayerTiles from "./components/PlayerTiles";
 
-const App = () => {
-    const dragOver = (event) => {
-        event.stopPropagation();
-        event.preventDefault();
-    }
+import letterPool from "./LetterPool";
 
-    const drop = (event) => {
-        event.stopPropagation();
-        event.preventDefault();
+export default class App extends Component {
+    constructor(props) {
+        super(props);
 
-        let id = event.dataTransfer.getData("id");
-        let element = document.getElementById(id);
+        this.state = {
+            player: 0,
+            firstPlayerLetters: [],
+            secondPlayerLetters: [],
+        };
 
-        if(element !== undefined && element !== null) {
-            element.classList.remove("collapsed-tile");
-            element.classList.remove("no-display");
+        for(let i = 0;i < 7;i++) {
+            const letter = letterPool.getRandomLetter();
+            this.state.firstPlayerLetters.push(letter);
+        }
+
+        for(let i = 0;i < 7;i++) {
+            const letter = letterPool.getRandomLetter();
+            this.state.secondPlayerLetters.push(letter);
         }
     }
 
-    return (
-        <div className="app" onDragOver={dragOver} onDrop={drop}>
-            <Player turn={true}/>
-            <Board />
-            <Player turn={false}/>
-        </div>
-    );
-}
+    addTileToPlayer1 = (letter, index) => {
+        let letters = [...this.state.firstPlayerLetters];
+        letters.splice(index, 0, letter);
+        this.setState({
+            firstPlayerLetters: letters
+        });
+    }
 
-export default App;
+    removeTileFromPlayer1 = (index) => {
+        let letters = [...this.state.firstPlayerLetters];
+        letters.splice(index, 1);
+        this.setState({
+            firstPlayerLetters: letters
+        });
+    }
+
+    addTileToPlayer2 = (letter, index) => {
+        let letters = [...this.state.secondPlayerLetters];
+        letters.splice(index, 0, letter);
+        this.setState({
+            secondPlayerLetters: letters
+        });
+    }
+
+    removeTileFromPlayer2 = (index) => {
+        let letters = [...this.state.secondPlayerLetters];
+        letters.splice(index, 1);
+        this.setState({
+            secondPlayerLetters: letters
+        });
+    }
+
+    toggle = () => {
+        let firstPlayerLetters = [...this.state.firstPlayerLetters];
+        for(let i = firstPlayerLetters.length;i < 7;i++) {
+            const letter = letterPool.getRandomLetter();
+            firstPlayerLetters.push(letter);
+        }
+
+        let secondPlayerLetters = [...this.state.secondPlayerLetters];
+        for(let i = secondPlayerLetters.length;i < 7;i++) {
+            const letter = letterPool.getRandomLetter();
+            secondPlayerLetters.push(letter);
+        }
+
+        this.setState({
+            player: 1 - this.state.player,
+            firstPlayerLetters: firstPlayerLetters,
+            secondPlayerLetters: secondPlayerLetters
+        });
+    }
+
+    dragOver = (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
+    drop = (event) => {
+        /*
+            The default drop event handler:
+                Handles the case when a dragged element is 
+                dropped in a place that's not a drop target.
+
+            This function is called when an element which was 
+            being dragged is dropped on an element which did 
+            not have its own drop handler.
+        */
+        event.preventDefault();
+
+        let letter = event.dataTransfer.getData("letter");
+        // TODO: Add code here to fix letter drop bug
+    }
+
+    render() {
+        console.log("render");
+        return (
+            <div className="app" onDragOver={this.dragOver} onDrop={this.drop}>
+                <PlayerTiles
+                    letters={this.state.firstPlayerLetters}
+                    enabled={this.state.player === 0}
+                    addTile={this.addTileToPlayer1}
+                    removeTile={this.removeTileFromPlayer1}
+                    toggle={this.toggle}
+                />
+                <Board />
+                <PlayerTiles
+                    letters={this.state.secondPlayerLetters}
+                    enabled={this.state.player === 1}
+                    addTile={this.addTileToPlayer2}
+                    removeTile={this.removeTileFromPlayer2}
+                    toggle={this.toggle}
+                />
+            </div>
+        );
+    }
+}
