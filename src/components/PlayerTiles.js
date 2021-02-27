@@ -1,16 +1,8 @@
-import React, { Component } from "react";
+import { Component } from "react";
 
 import Tile from "./Tile";
 
 class PlayerTiles extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            dragOverIndex: null,
-        };
-    }
-
     addTile = (letter, index) => {
         setTimeout(() => this.props.addTile(letter, index), 0);
     }
