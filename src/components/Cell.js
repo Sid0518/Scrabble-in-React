@@ -34,10 +34,17 @@ export default class Cell extends Component {
     drop = (event) => {
         this.removeDragHover(event);
 
+        const id = event.dataTransfer.getData("id");
+        const element = document.getElementById(id);
+        element.style = "display: block;";
+        
+        const remove = new Event("remove");
+        element.dispatchEvent(remove);
+
         const letter = event.dataTransfer.getData("letter");
-        this.setState({
+        setTimeout(() => this.setState({
             letter: letter
-        });
+        }), 0);
     }
 
     removeTile = () => {

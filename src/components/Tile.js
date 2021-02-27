@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { v4 as uuid } from "uuid";
 
 const points = {
     A: 1,
@@ -30,13 +31,25 @@ const points = {
 };
 
 class Tile extends Component {
-    toggle = () => this.setState({
-        draggable: !this.state.draggable
-    });
+    constructor(props) {
+        super(props);
+        this.id = uuid();
+    }
+
+    componentDidMount = () => {
+        this.element.addEventListener(
+            "remove", 
+            () => {
+                this.props.removeTile();
+            }
+        );
+    }
 
     startDrag = (event) => {
+        event.dataTransfer.setData("id", this.id);
         event.dataTransfer.setData("letter", this.props.letter);
-        setTimeout(() => this.props.removeTile(), 0);
+
+        setTimeout(() => this.element.style = "display: none;", 0);
     }
 
     dragOver = (event) => {
@@ -51,6 +64,8 @@ class Tile extends Component {
 
         return (
             <div
+                id={this.id}
+                ref={ref => this.element = ref}
                 className={className}
                 draggable={this.props.draggable ?? false}
                 onDragStart={this.startDrag}

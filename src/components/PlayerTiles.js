@@ -31,6 +31,13 @@ class PlayerTiles extends Component {
         event.stopPropagation();
         event.preventDefault();
 
+        const id = event.dataTransfer.getData("id");
+        const element = document.getElementById(id);
+        element.style = "display: block;";
+        
+        const remove = new Event("remove");
+        element.dispatchEvent(remove);
+
         const letter = event.dataTransfer.getData("letter");
         const index = this.getTileIndexFromEvent(event);
         this.addTile(letter, index);

@@ -27,7 +27,7 @@ const counts = {
     Z: 1
 };
 
-class LetterPool {
+export default class LetterPool {
     constructor() {
         this.populate();
     }
@@ -52,6 +52,3 @@ class LetterPool {
         return letter;
     }
 }
-
-const letterPool = new LetterPool();
-export default letterPool;

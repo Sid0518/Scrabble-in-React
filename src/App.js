@@ -5,11 +5,12 @@ import './App.css';
 import Board from "./components/Board";
 import PlayerTiles from "./components/PlayerTiles";
 
-import letterPool from "./LetterPool";
+import LetterPool from "./LetterPool";
 
 export default class App extends Component {
     constructor(props) {
         super(props);
+        this.letterPool = new LetterPool();
 
         this.state = {
             player: 0,
@@ -18,12 +19,12 @@ export default class App extends Component {
         };
 
         for(let i = 0;i < 7;i++) {
-            const letter = letterPool.getRandomLetter();
+            const letter = this.letterPool.getRandomLetter();
             this.state.firstPlayerLetters.push(letter);
         }
 
         for(let i = 0;i < 7;i++) {
-            const letter = letterPool.getRandomLetter();
+            const letter = this.letterPool.getRandomLetter();
             this.state.secondPlayerLetters.push(letter);
         }
     }
@@ -31,6 +32,7 @@ export default class App extends Component {
     addTileToPlayer1 = (letter, index) => {
         let letters = [...this.state.firstPlayerLetters];
         letters.splice(index, 0, letter);
+        
         this.setState({
             firstPlayerLetters: letters
         });
@@ -63,13 +65,17 @@ export default class App extends Component {
     toggle = () => {
         let firstPlayerLetters = [...this.state.firstPlayerLetters];
         for(let i = firstPlayerLetters.length;i < 7;i++) {
-            const letter = letterPool.getRandomLetter();
+            const letter = this.letterPool.getRandomLetter();
+            if(letter === null)
+                break;
             firstPlayerLetters.push(letter);
         }
 
         let secondPlayerLetters = [...this.state.secondPlayerLetters];
         for(let i = secondPlayerLetters.length;i < 7;i++) {
-            const letter = letterPool.getRandomLetter();
+            const letter = this.letterPool.getRandomLetter();
+            if(letter === null)
+                break;
             secondPlayerLetters.push(letter);
         }
 
@@ -97,12 +103,13 @@ export default class App extends Component {
         */
         event.preventDefault();
 
-        let letter = event.dataTransfer.getData("letter");
+        const id = event.dataTransfer.getData("id");
+        const element = document.getElementById(id);
+        element.style = "display: block;";
         // TODO: Add code here to fix letter drop bug
     }
 
     render() {
-        console.log("render");
         return (
             <div className="app" onDragOver={this.dragOver} onDrop={this.drop}>
                 <PlayerTiles
