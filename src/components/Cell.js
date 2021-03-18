@@ -53,7 +53,7 @@ export default class Cell extends Component {
 
             const id = event.dataTransfer.getData("id");
             const element = document.getElementById(id);
-            element.style = "display: block;";
+            // element.style = "display: block;";
             
             const remove = new Event("remove");
             element.dispatchEvent(remove);

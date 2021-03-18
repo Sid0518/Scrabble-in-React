@@ -399,7 +399,8 @@ export default class App extends Component {
 
         const id = event.dataTransfer.getData("id");
         const element = document.getElementById(id);
-        element.style = "display: block;";
+        element.classList.remove("collapsed-tile");
+        // element.style = "display: block;";
     }
 
     render() {

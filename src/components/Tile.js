@@ -50,7 +50,8 @@ class Tile extends Component {
             event.dataTransfer.setData("id", this.id);
             event.dataTransfer.setData("letter", this.props.letter);
 
-            setTimeout(() => this.element.style = "display: none;", 0);
+            setTimeout(() => this.element.classList.add("collapsed-tile"), 0);
+            // setTimeout(() => this.element.style = "display: none;", 0);
         }
     }
 

@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { v4 as uuid } from "uuid";
 
 import Tile from "./Tile";
 
@@ -34,7 +35,7 @@ class PlayerTiles extends Component {
 
             const id = event.dataTransfer.getData("id");
             const element = document.getElementById(id);
-            element.style = "display: block;";
+            // element.style = "display: block;";
             
             const remove = new Event("remove");
             element.dispatchEvent(remove);
@@ -54,14 +55,15 @@ class PlayerTiles extends Component {
                     onDrop={this.props.enabled ? this.drop : null}
                 >
                     {
-                        this.props.letters.map((letter, index) => 
-                            <Tile
-                                key={index}
+                        this.props.letters.map((letter, index) => {
+                            const key = uuid();
+                            return <Tile
+                                key={key}
                                 letter={letter}
                                 draggable={this.props.enabled}
                                 removeTile={() => this.removeTile(index)}
                             />
-                        )
+                        })
                     }
                 </div>
 
