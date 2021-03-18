@@ -13,7 +13,9 @@ export default class Cell extends Component {
 
         this.state = {
             droppable: props.droppable,
-            letter: null
+            letter: 
+                (props.letter === undefined) ? 
+                    null : props.letter
         };
     }
 
@@ -32,19 +34,21 @@ export default class Cell extends Component {
     }
 
     drop = (event) => {
-        this.removeDragHover(event);
+        if(this.state.letter === null) {
+            this.removeDragHover(event);
 
-        const id = event.dataTransfer.getData("id");
-        const element = document.getElementById(id);
-        element.style = "display: block;";
-        
-        const remove = new Event("remove");
-        element.dispatchEvent(remove);
+            const id = event.dataTransfer.getData("id");
+            const element = document.getElementById(id);
+            element.style = "display: block;";
+            
+            const remove = new Event("remove");
+            element.dispatchEvent(remove);
 
-        const letter = event.dataTransfer.getData("letter");
-        setTimeout(() => this.setState({
-            letter: letter
-        }), 0);
+            const letter = event.dataTransfer.getData("letter");
+            setTimeout(() => this.setState({
+                letter: letter
+            }), 0);
+        }
     }
 
     removeTile = () => {

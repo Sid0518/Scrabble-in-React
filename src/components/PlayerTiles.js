@@ -28,19 +28,21 @@ class PlayerTiles extends Component {
     }
 
     drop = (event) => {
-        event.stopPropagation();
-        event.preventDefault();
+        if(this.props.letters.length < 7) {
+            event.stopPropagation();
+            event.preventDefault();
 
-        const id = event.dataTransfer.getData("id");
-        const element = document.getElementById(id);
-        element.style = "display: block;";
-        
-        const remove = new Event("remove");
-        element.dispatchEvent(remove);
+            const id = event.dataTransfer.getData("id");
+            const element = document.getElementById(id);
+            element.style = "display: block;";
+            
+            const remove = new Event("remove");
+            element.dispatchEvent(remove);
 
-        const letter = event.dataTransfer.getData("letter");
-        const index = this.getTileIndexFromEvent(event);
-        this.addTile(letter, index);
+            const letter = event.dataTransfer.getData("letter");
+            const index = this.getTileIndexFromEvent(event);
+            this.addTile(letter, index);
+        }
     }
 
     render() {
