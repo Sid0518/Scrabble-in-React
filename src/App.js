@@ -7,30 +7,6 @@ import PlayerTiles from "./components/PlayerTiles";
 
 import LetterPool from "./LetterPool";
 
-import Cell from "./components/Cell";
-import DoubleLetterCell from "./components/DoubleLetterCell";
-import DoubleWordCell from "./components/DoubleWordCell";
-import TripleLetterCell from "./components/TripleLetterCell";
-import TripleWordCell from "./components/TripleWordCell";
-
-const tripleWord = [
-    0, 7, 14, 105, 119, 210, 217, 224
-];
-const doubleWord = [
-    16, 32, 48, 64, 160, 176, 192, 208, 
-    28, 42, 56, 70, 154, 168, 182, 196
-];
-const tripleLetter = [
-    20, 24, 76, 80, 84, 88, 136, 140, 
-    144, 148, 200, 204
-];
-const doubleLetter = [
-    3, 11, 36, 38, 45, 52, 59, 92, 96, 
-    98, 102, 108, 116, 122, 126, 128, 
-    132, 165, 172, 179, 186, 188, 213, 
-    221
-];
-
 export default class App extends Component {
     constructor(props) {
         super(props);
@@ -43,18 +19,8 @@ export default class App extends Component {
             secondPlayerLetters: [],
         };
 
-        for(let i = 0;i < 225;i++) {
-            if(tripleWord.includes(i))
-                this.state.board.push(<TripleWordCell key={i} droppable={true}/>)
-            else if(doubleWord.includes(i))
-                this.state.board.push(<DoubleWordCell key={i} droppable={true}/>)
-            else if(tripleLetter.includes(i))
-                this.state.board.push(<TripleLetterCell key={i} droppable={true}/>)
-            else if(doubleLetter.includes(i))
-                this.state.board.push(<DoubleLetterCell key={i} droppable={true}/>)
-            else
-                this.state.board.push(<Cell key={i} droppable={true}/>)
-        }
+        for(let i = 0;i < 225;i++)
+            this.state.board.push("");
 
         for(let i = 0;i < 7;i++) {
             const letter = this.letterPool.getRandomLetter();
@@ -67,36 +33,60 @@ export default class App extends Component {
         }
     }
 
+    placeTileOnBoard = (letter, index) => {
+        this.setState((prevState) => {
+            const board = [...prevState.board];
+            board[index] = letter;
+
+            return {
+                ...prevState,
+                board: board
+            };
+        })
+    }
+
     addTileToPlayer1 = (letter, index) => {
         let letters = [...this.state.firstPlayerLetters];
         letters.splice(index, 0, letter);
         
-        this.setState({
-            firstPlayerLetters: letters
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                firstPlayerLetters: letters
+            };
         });
     }
 
     removeTileFromPlayer1 = (index) => {
         let letters = [...this.state.firstPlayerLetters];
         letters.splice(index, 1);
-        this.setState({
-            firstPlayerLetters: letters
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                firstPlayerLetters: letters
+            };
         });
     }
 
     addTileToPlayer2 = (letter, index) => {
         let letters = [...this.state.secondPlayerLetters];
         letters.splice(index, 0, letter);
-        this.setState({
-            secondPlayerLetters: letters
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                secondPlayerLetters: letters
+            };
         });
     }
 
     removeTileFromPlayer2 = (index) => {
         let letters = [...this.state.secondPlayerLetters];
         letters.splice(index, 1);
-        this.setState({
-            secondPlayerLetters: letters
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                secondPlayerLetters: letters
+            };
         });
     }
 
@@ -117,10 +107,13 @@ export default class App extends Component {
             secondPlayerLetters.push(letter);
         }
 
-        this.setState({
-            player: 1 - this.state.player,
-            firstPlayerLetters: firstPlayerLetters,
-            secondPlayerLetters: secondPlayerLetters
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                player: 1 - this.state.player,
+                firstPlayerLetters: firstPlayerLetters,
+                secondPlayerLetters: secondPlayerLetters
+            };
         });
     }
 

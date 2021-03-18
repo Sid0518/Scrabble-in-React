@@ -46,10 +46,12 @@ class Tile extends Component {
     }
 
     startDrag = (event) => {
-        event.dataTransfer.setData("id", this.id);
-        event.dataTransfer.setData("letter", this.props.letter);
+        if(this.props.draggable) {
+            event.dataTransfer.setData("id", this.id);
+            event.dataTransfer.setData("letter", this.props.letter);
 
-        setTimeout(() => this.element.style = "display: none;", 0);
+            setTimeout(() => this.element.style = "display: none;", 0);
+        }
     }
 
     dragOver = (event) => {

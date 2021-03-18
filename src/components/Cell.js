@@ -12,7 +12,6 @@ export default class Cell extends Component {
         this.rewardLabel = "";
 
         this.state = {
-            droppable: props.droppable,
             letter: 
                 (props.letter === undefined) ? 
                     null : props.letter
@@ -45,15 +44,21 @@ export default class Cell extends Component {
             element.dispatchEvent(remove);
 
             const letter = event.dataTransfer.getData("letter");
-            setTimeout(() => this.setState({
-                letter: letter
+            setTimeout(() => this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    letter: letter
+                };
             }), 0);
         }
     }
 
     removeTile = () => {
-        this.setState({
-            letter: null
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                letter: null,
+            };
         });
     }
 
@@ -76,7 +81,7 @@ export default class Cell extends Component {
                         (this.state.letter !== undefined && this.state.letter !== null) ?
                             <Tile
                                 letter={this.state.letter}
-                                draggable={true}
+                                draggable={!this.props.finalized}
                                 removeTile={this.removeTile}
                                 inCell={true}
                             /> : ""
