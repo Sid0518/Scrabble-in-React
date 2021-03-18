@@ -18,7 +18,7 @@ class PlayerTiles extends Component {
 
         const rect = dropTarget.getBoundingClientRect();
         const ratio = (dropY - rect.top) / (rect.bottom - rect.top);
-        const index = Math.round(this.props.letters.length * ratio);
+        const index = Math.round((this.props.letters.length - 1) * ratio);
         
         return index;
     }
@@ -29,21 +29,19 @@ class PlayerTiles extends Component {
     }
 
     drop = (event) => {
-        if(this.props.letters.length < 7) {
-            event.stopPropagation();
-            event.preventDefault();
+        event.stopPropagation();
+        event.preventDefault();
 
-            const id = event.dataTransfer.getData("id");
-            const element = document.getElementById(id);
-            // element.style = "display: block;";
-            
-            const remove = new Event("remove");
-            element.dispatchEvent(remove);
+        const id = event.dataTransfer.getData("id");
+        const element = document.getElementById(id);
+        // element.style = "display: block;";
+        
+        const remove = new Event("remove");
+        element.dispatchEvent(remove);
 
-            const letter = event.dataTransfer.getData("letter");
-            const index = this.getTileIndexFromEvent(event);
-            this.addTile(letter, index);
-        }
+        const letter = event.dataTransfer.getData("letter");
+        const index = this.getTileIndexFromEvent(event);
+        this.addTile(letter, index);
     }
 
     render() {
