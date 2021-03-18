@@ -17,10 +17,15 @@ export default class App extends Component {
             board: [],
             firstPlayerLetters: [],
             secondPlayerLetters: [],
+            movesMade: [],
         };
 
         for(let i = 0;i < 225;i++)
-            this.state.board.push("");
+            this.state.board.push({
+                letter: "",
+                droppable: true,
+                finalized: false
+            });
 
         for(let i = 0;i < 7;i++) {
             const letter = this.letterPool.getRandomLetter();
@@ -36,13 +41,41 @@ export default class App extends Component {
     placeTileOnBoard = (letter, index) => {
         this.setState((prevState) => {
             const board = [...prevState.board];
-            board[index] = letter;
+            board[index] = {
+                ...board[index],
+                letter: letter
+            };
+
+            const movesMade = [...prevState.movesMade];
+            movesMade.push(index);
 
             return {
                 ...prevState,
-                board: board
+                board: board,
+                movesMade: movesMade
             };
-        })
+        });
+    }
+
+    removeTileFromBoard = (index) => {
+        this.setState((prevState) => {
+            const board = [...prevState.board];
+            board[index] = {
+                ...board[index],
+                letter: ""
+            };
+
+            const movesMade = [...prevState.movesMade];
+            const idx = movesMade.indexOf(index);
+            if(idx !== -1)
+                movesMade.splice(idx, 1);
+
+            return {
+                ...prevState,
+                board: board,
+                movesMade: movesMade,
+            };
+        });
     }
 
     addTileToPlayer1 = (letter, index) => {
@@ -107,12 +140,21 @@ export default class App extends Component {
             secondPlayerLetters.push(letter);
         }
 
+        const board = [...this.state.board];
+        for(const index of this.state.movesMade)
+            board[index] = {
+                ...board[index],
+                finalized: true
+            };
+
         this.setState((prevState) => {
             return {
                 ...prevState,
+                board: board,
                 player: 1 - this.state.player,
                 firstPlayerLetters: firstPlayerLetters,
-                secondPlayerLetters: secondPlayerLetters
+                secondPlayerLetters: secondPlayerLetters,
+                movesMade: [],
             };
         });
     }
@@ -150,7 +192,11 @@ export default class App extends Component {
                     removeTile={this.removeTileFromPlayer1}
                     toggle={this.toggle}
                 />
-                <Board board={this.state.board}/>
+                <Board 
+                    board={this.state.board} 
+                    placeTile={this.placeTileOnBoard}
+                    removeTile={this.removeTileFromBoard}
+                />
                 <PlayerTiles
                     letters={this.state.secondPlayerLetters}
                     enabled={this.state.player === 1}

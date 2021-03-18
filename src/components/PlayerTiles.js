@@ -56,7 +56,7 @@ class PlayerTiles extends Component {
                     {
                         this.props.letters.map((letter, index) => 
                             <Tile
-                                id={index}
+                                key={index}
                                 letter={letter}
                                 draggable={this.props.enabled}
                                 removeTile={() => this.removeTile(index)}

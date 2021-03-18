@@ -6,16 +6,31 @@ export default class Cell extends Component {
     constructor(props) {
         super(props);
 
-        this.className = "cell";
         this.letterMultiplier = 1;
         this.wordMultiplier = 1;
+
+        this.className = "cell";
         this.rewardLabel = "";
 
-        this.state = {
-            letter: 
-                (props.letter === undefined) ? 
-                    null : props.letter
-        };
+        if(props.letterMultiplier === 2) {
+            this.className += " double-letter special-cell";
+            this.rewardLabel = "DL";
+        }
+
+        else if(props.letterMultiplier === 3) {
+            this.className += " triple-letter special-cell";
+            this.rewardLabel = "TL";
+        }
+        
+        else if(props.wordMultiplier === 2) {
+            this.className += " double-word special-cell";
+            this.rewardLabel = "DW";
+        }
+        
+        else if(props.wordMultiplier === 3) {
+            this.className += " triple-word special-cell";
+            this.rewardLabel = "TW";
+        }
     }
 
     dragOver = (event) => {
@@ -33,7 +48,7 @@ export default class Cell extends Component {
     }
 
     drop = (event) => {
-        if(this.state.letter === null) {
+        if(this.props.letter === "") {
             this.removeDragHover(event);
 
             const id = event.dataTransfer.getData("id");
@@ -44,29 +59,19 @@ export default class Cell extends Component {
             element.dispatchEvent(remove);
 
             const letter = event.dataTransfer.getData("letter");
-            setTimeout(() => this.setState((prevState) => {
-                return {
-                    ...prevState,
-                    letter: letter
-                };
-            }), 0);
+            setTimeout(() => this.props.placeTile(letter, this.props.index), 0);
         }
     }
 
     removeTile = () => {
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                letter: null,
-            };
-        });
+        this.props.removeTile(this.props.index);
     }
 
     render() {
         return (
             <div
                 ref={ref => this.element = ref}
-                className={"square " + this.state.letter}
+                className={"square " + this.props.letter}
                 onDragOver={this.props.droppable ? this.dragOver : null}
                 onDragLeave={this.props.droppable ? this.removeDragHover : null}
                 onDrop={this.props.droppable ? this.drop : null}
@@ -78,9 +83,9 @@ export default class Cell extends Component {
                     </div>
 
                     {
-                        (this.state.letter !== undefined && this.state.letter !== null) ?
+                        (this.props.letter !== "") ?
                             <Tile
-                                letter={this.state.letter}
+                                letter={this.props.letter}
                                 draggable={!this.props.finalized}
                                 removeTile={this.removeTile}
                                 inCell={true}

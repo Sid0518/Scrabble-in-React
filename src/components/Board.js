@@ -1,10 +1,6 @@
 import { Component } from "react";
 
 import Cell from "./Cell";
-import DoubleLetterCell from "./DoubleLetterCell";
-import DoubleWordCell from "./DoubleWordCell";
-import TripleLetterCell from "./TripleLetterCell";
-import TripleWordCell from "./TripleWordCell";
 
 const tripleWord = [
     0, 7, 14, 105, 119, 210, 217, 224
@@ -32,16 +28,31 @@ class Board extends Component {
                     {
                         Array.from(
                             this.props.board.map((cellData, i) => {
+                                let letterMultiplier = 1;
+                                let wordMultiplier = 1;
+
                                 if(tripleWord.includes(i))
-                                    return<TripleWordCell key={i} droppable={true} finalized={false}/>
+                                    wordMultiplier = 3;
                                 else if(doubleWord.includes(i))
-                                    return <DoubleWordCell key={i} droppable={true} finalized={false}/>
-                                else if(tripleLetter.includes(i))
-                                    return <TripleLetterCell key={i} droppable={true} finalized={false}/>
+                                    wordMultiplier = 2;
+                                
+                                    if(tripleLetter.includes(i))
+                                    letterMultiplier = 3;
                                 else if(doubleLetter.includes(i))
-                                    return <DoubleLetterCell key={i} droppable={true} finalized={false}/>
-                                else
-                                    return <Cell key={i} droppable={true} finalized={false}/>
+                                    letterMultiplier = 2;
+                                
+                                return (
+                                    <Cell 
+                                        key={i} index={i} 
+                                        letter={cellData.letter}
+                                        letterMultiplier={letterMultiplier}
+                                        wordMultiplier={wordMultiplier}
+                                        placeTile={this.props.placeTile}
+                                        removeTile={this.props.removeTile}
+                                        droppable={cellData.droppable} 
+                                        finalized={cellData.finalized} 
+                                    />
+                                );
                             })
                         )
                     }
