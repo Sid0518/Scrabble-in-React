@@ -311,8 +311,13 @@ export default class App extends Component {
         }
         
         const uniq = new Set(words.map(wordData => JSON.stringify(wordData)));
-        const scores = Array.from(uniq).map(wordJson => JSON.parse(wordJson).score);
-        return scores.reduce((a, b) => a + b);
+        let scores = Array.from(uniq).map(wordJson => JSON.parse(wordJson).score);
+        if(scores.length === 0)
+            scores = [0];
+        
+        const score = scores.reduce((a, b) => a + b);
+        console.log(score);
+        return score;
     }
 
     toggle = () => {
