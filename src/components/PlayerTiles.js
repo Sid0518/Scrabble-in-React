@@ -47,6 +47,10 @@ class PlayerTiles extends Component {
     render() {
         return (
             <div className="player">
+                <div className="score">
+                    {this.props.score}
+                </div>
+
                 <div
                     className="player-tiles"
                     onDragOver={this.props.enabled ? this.dragOver : null}

@@ -413,6 +413,7 @@ export default class App extends Component {
             <div className="app" onDragOver={this.dragOver} onDrop={this.drop}>
                 <PlayerTiles
                     letters={this.state.firstPlayerLetters}
+                    score={this.state.firstPlayerScore}
                     enabled={this.state.player === 0}
                     addTile={this.addTileToPlayer1}
                     removeTile={this.removeTileFromPlayer1}
@@ -425,6 +426,7 @@ export default class App extends Component {
                 />
                 <PlayerTiles
                     letters={this.state.secondPlayerLetters}
+                    score={this.state.secondPlayerScore}
                     enabled={this.state.player === 1}
                     addTile={this.addTileToPlayer2}
                     removeTile={this.removeTileFromPlayer2}
